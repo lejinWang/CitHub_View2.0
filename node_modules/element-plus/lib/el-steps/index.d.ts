@@ -1,0 +1,2 @@
+import Steps from './src/index.vue';
+export default Steps;

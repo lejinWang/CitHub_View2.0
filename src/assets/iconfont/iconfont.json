@@ -1,0 +1,72 @@
+{
+  "id": "2261515",
+  "name": "cithub_icon",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "17334992",
+      "name": "用户",
+      "font_class": "yonghu",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "788018",
+      "name": "加号",
+      "font_class": "jiahao",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "1012132",
+      "name": "加",
+      "font_class": "wuuiconxiangjifangda",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "1265483",
+      "name": "减号",
+      "font_class": "jianhao",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "6237070",
+      "name": "竖线",
+      "font_class": "tubiaozhizuo-",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "10422354",
+      "name": "组合接口",
+      "font_class": "zuhejiekou",
+      "unicode": "e643",
+      "unicode_decimal": 58947
+    },
+    {
+      "icon_id": "11753732",
+      "name": "右箭头",
+      "font_class": "V",
+      "unicode": "e6dd",
+      "unicode_decimal": 59101
+    },
+    {
+      "icon_id": "12550479",
+      "name": "组合",
+      "font_class": "zuhe",
+      "unicode": "e632",
+      "unicode_decimal": 58930
+    },
+    {
+      "icon_id": "6446344",
+      "name": "方块",
+      "font_class": "tianchongxing-",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    }
+  ]
+}

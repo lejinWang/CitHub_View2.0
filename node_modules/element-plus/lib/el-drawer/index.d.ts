@@ -1,0 +1,2 @@
+import Drawer from './src/index.vue';
+export default Drawer;

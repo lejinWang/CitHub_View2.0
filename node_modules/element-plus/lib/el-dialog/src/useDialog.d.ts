@@ -1,0 +1,20 @@
+import { UPDATE_MODEL_EVENT } from '@element-plus/utils/constants';
+import type { UseDialogProps } from './dialog';
+import type { SetupContext } from '@vue/runtime-core';
+export declare const CLOSE_EVENT = "close";
+export declare const OPEN_EVENT = "open";
+export declare const CLOSED_EVENT = "closed";
+export declare const OPENED_EVENT = "opened";
+export { UPDATE_MODEL_EVENT };
+export default function (props: UseDialogProps, ctx: SetupContext): {
+    afterEnter: () => void;
+    afterLeave: () => void;
+    handleClose: () => void;
+    onModalClick: () => void;
+    closed: import("vue").Ref<boolean>;
+    dialogRef: any;
+    style: import("vue").ComputedRef<CSSStyleDeclaration>;
+    modalRef: import("vue").Ref<HTMLElement>;
+    visible: import("vue").Ref<boolean>;
+    zIndex: import("vue").Ref<number>;
+};

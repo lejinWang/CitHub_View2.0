@@ -1,7 +1,6 @@
 <template>
-  <div class="hello">
     <el-container>
-      <el-row>
+      <el-row style="    width: 100%;">
         <el-col
           :xs="{ span: 24, offset: 0 }"
           :sm="{ span: 24, offset: 0 }"
@@ -28,7 +27,7 @@
               tasks
             </h2>
             <p class="text-secondary">
-              Find<strong style="color: #17a2b8 !important" id="searchNum"> 1 </strong>
+              Find <strong style="color: #17a2b8 !important" id="searchNum">  {{ taskListData.list.length}} </strong>
               task of this tag.
             </p>
             <el-row
@@ -61,21 +60,31 @@
             >
           </div>
           <el-col :span="24">
-            <taskList ref="RefChilde" :taskListData="taskListData"></taskList>
+            <taskList ref="RefChilde" :taskListData="taskListData.list"></taskList>
           </el-col>
         </el-col>
       </el-row>
     </el-container>
-  </div>
 </template>
 
 <script>
 import { useRouter, useRoute } from "vue-router";
-import { ref } from "vue";
+import { ref,onMounted ,reactive} from "vue";
 import tagList from "./taglist.vue";
 import taskList from "./tasklist.vue";
+import {request} from './request'
+import { getUserName,getDateFromTime_Day } from "./common";
 export default {
   setup() {
+     onMounted(() => {
+      // eslint-disable-next-line no-unused-vars
+      let res = getTaskListByTag(tag.value);
+      res.then(function (data) {
+        console.log(data.list);
+        dealData(data.list);
+      });
+      console.log("初始化数据");
+    });
     const router = useRouter();
     const route = useRoute();
     const tag = ref(route.query.tag);
@@ -84,27 +93,63 @@ export default {
     function goBack() {
       router.go(-1);
     }
-    let data2 = {
-      id: 1,
-      title: "ACTS",
-      author: "ligang",
-      time: getNowDate(),
-      description:
-        "ACTS is a well-known combinatorial test suite generation tool. This tools was initially developed by NIST, and has been used in many real-world projects and organisations.",
-      tags: "ss",
-    };
-
-    let taskListData = Array(20).fill(data2);
+   //1.需要展示的数据
+    let taskListData = reactive({ list: [] });
     console.log("加载index");
     let keyword = ref("");
     const RefChilde = ref(); //RefChilde 要和Son组件上的class名相同
     function searchByKeyword() {
-      data2.title = keyword.value;
-      tag.value = keyword.value;
-      taskListData = Array(20).fill(data2);
+      console.log("搜索数据");
+      let res = getTaskListByTagAndKeyWord(tag.value,keyword.value);
+      res.then(function (data) {
+        console.log(data.list);
+        dealData(data.list);
+      });
+     
     }
 
-    return { tag, goBack, RefChilde, keyword, searchByKeyword, taskListData, data2 };
+    function getTaskListByTagAndKeyWord(tag,keyword) {
+      // alert(keyword)
+      if (keyword == "") {
+        return getTaskListByTag()
+      } else {
+        return request(
+          {
+            url: "/service/infor/searchByTagAndKeyword/" + tag+"/"+keyword,
+            method: "get",
+            data: {},
+          },
+          "/serviceapi"
+        );
+      }
+    }
+    const dealData=(tasklist)=>{
+      taskListData.list=tasklist
+       for (var i = 0; i < taskListData.list.length; i++) {
+        let res = getUserName(tasklist[i].posterId);
+        let b = i;
+        res.then(function (value) {
+          console.log(value.username);
+          console.log(taskListData.list[b]);
+          eval("taskListData.list[b].author='" + value.username + "'");
+        });
+        taskListData.list[i].date=getDateFromTime_Day(taskListData.list[i].date)
+      }
+
+    }
+function getTaskListByTag(tag) {
+  // alert(keyword)
+    return request(
+      {
+        url: "/crowdsourcing/infor/searchByTag/" + tag,
+        method: "get",
+        data: {},
+      },
+      "/crowdsourcingapi"
+    );
+  
+}
+    return { getTaskListByTag,dealData,tag, goBack, RefChilde, keyword, searchByKeyword, taskListData };
   },
   components: {
     tagList,
@@ -114,26 +159,18 @@ export default {
     // eslint-disable-next-line no-unused-vars
     $route(to, from) {
       console.log(this);
-      this.tag = this.$route.query.tag;
-      this.data2.tags = this.tag;
-
-      this.taskListData = Array(20).fill(this.data2);
+       this.tag = this.$route.query.tag;
+      // this.data.tags = this.type;
+     let res= this.getTaskListByTag(this.tag)
+     let that=this
+      res.then(function (data) {
+        console.log(data.list);
+        that.dealData(data.list);
+      });
     },
   },
 };
-function getNowDate() {
-  let date = new Date();
-  let y = date.getFullYear();
-  let m = date.getMonth() + 1;
-  let d = date.getDate();
-  // let H = date.getHours();
-  // let mm = date.getMinutes();
-  // let s=date.getSeconds()
-  m = m < 10 ? "0" + m : m;
-  d = d < 10 ? "0" + d : d;
-  // H = H < 10 ? "0" + H : H;
-  return y + "-" + m + "-" + d;
-}
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

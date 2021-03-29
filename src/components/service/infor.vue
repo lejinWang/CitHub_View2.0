@@ -20,7 +20,7 @@
         <el-breadcrumb-item :to="{ path: '/' }" @click="goHome"
           >Service</el-breadcrumb-item
         >
-        <el-breadcrumb-item>{{ serviceInfor.title }}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ serviceInfor.data.title }}</el-breadcrumb-item>
       </el-breadcrumb>
       <el-col
         :xs="{ span: 24, offset: 0 }"
@@ -30,9 +30,9 @@
         :xl="{ span: 4, offset: 0 }"
         style="text-align: right; float: right"
       >
-        <div><img :src="serviceInfor.img" style="height: auto" /></div>
+        <div><img :src="serviceInfor.data.img" style="height: auto" /></div>
         <el-rate
-          v-model="serviceInfor.scores"
+          v-model="serviceInfor.data.scores"
           disabled
           show-score
           text-color="#ff9900"
@@ -49,9 +49,17 @@
         style="float: left"
       >
         <el-col :span="24"
-          ><h1 style="float: left">{{ serviceInfor.title }}</h1>
-          <star style="float: right; font-size: 1rem; padding: 10px; text-algin: right"
-            ><el-button style="font-size: 1rem; padding: 5px 10px" @click="starClick"
+          ><h1 style="float: left">{{ serviceInfor.data.title }}</h1>
+          <star
+            style="
+              float: right;
+              font-size: 1rem;
+              padding: 10px;
+              text-algin: right;
+            "
+            ><el-button
+              style="font-size: 1rem; padding: 5px 10px"
+              @click="starClick"
               ><i :class="starData.starClass"></i> Star</el-button
             ><el-label
               style="
@@ -65,7 +73,7 @@
         >
         <el-col :span="24" style="margin-bottom: 10px">
           <el-tag
-            v-for="item in serviceInfor.tags.split(',')"
+            v-for="item in serviceInfor.data.tags.split(',')"
             :key="item"
             effect="dark"
             style="
@@ -81,28 +89,30 @@
         </el-col>
         <el-col :span="24" style="margin-bottom: 10px">
           <label>
-            Author: <author>{{ serviceInfor.author }} </author>
+            Author: <author>{{ serviceInfor.data.author }} </author>
           </label>
           <label>
-            Version: <version>{{ serviceInfor.version }} </version>
+            Version: <version>{{ serviceInfor.data.version }} </version>
           </label>
           <label>
-            Last Updated: <updatetime>{{ serviceInfor.time }} </updatetime>
+            Last Updated: <updatetime>{{ serviceInfor.data.date }} </updatetime>
           </label>
           <label>
-            License: <license>{{ serviceInfor.license }}</license>
+            License: <license>{{ serviceInfor.data.license }}</license>
           </label>
         </el-col>
         <el-col :span="24" style="margin-bottom: 10px">
           Repository:
           <repository
-            ><a :href="serviceInfor.repository" style="font-weight: bold">{{
-              serviceInfor.repository
-            }}</a></repository
+            ><a
+              :href="serviceInfor.data.repository"
+              style="font-weight: bold"
+              >{{ serviceInfor.data.repository }}</a
+            ></repository
           >
         </el-col>
         <el-col :span="24" style="margin-bottom: 20px">
-          {{ serviceInfor.short_desc }}
+          {{ serviceInfor.data.shortDest }}
         </el-col>
         <el-col
           :span="24"
@@ -116,45 +126,51 @@
           "
         >
           Service URL (POST method):
-          <url>{{ serviceInfor.url }}</url>
+          <url>{{ serviceInfor.data.url }}</url>
         </el-col>
       </el-col>
 
       <el-col :span="24" style="margin-bottom: 10px; z-index: 0"
         ><el-tabs v-model="tabsActiveName" type="card" @tab-click="handleClick">
           <el-tab-pane label="Details" name="details">
-            <p>{{ serviceInfor.description }}</p>
+            <p>{{ serviceInfor.data.description }}</p>
             <h2 style="margin-top: 30px">Inputs</h2>
             <el-table
-              :data="xput_format.input"
+              :data="xputFormat.input"
               stripe
               style="width: 100%; font-size: 1rem"
               :header-cell-style="{ background: '#343a40', color: '#fff' }"
             >
               <el-table-column prop="parameter" label="Parameter" width="180">
               </el-table-column>
-              <el-table-column prop="type" label="Type" width="180"> </el-table-column>
-              <el-table-column prop="desc" label="Description"> </el-table-column>
-              <el-table-column prop="example" label="Example"> </el-table-column>
+              <el-table-column prop="type" label="Type" width="180">
+              </el-table-column>
+              <el-table-column prop="desc" label="Description">
+              </el-table-column>
+              <el-table-column prop="example" label="Example">
+              </el-table-column>
             </el-table>
             <h2 style="margin-top: 30px">outputs</h2>
             <el-table
-              :data="xput_format.output"
+              :data="xputFormat.output"
               stripe
               style="width: 100%; font-size: 1rem"
               :header-cell-style="{ background: '#343a40', color: '#fff' }"
             >
               <el-table-column prop="parameter" label="Parameter" width="180">
               </el-table-column>
-              <el-table-column prop="type" label="Type" width="180"> </el-table-column>
-              <el-table-column prop="desc" label="Description"> </el-table-column>
-              <el-table-column prop="example" label="Example"> </el-table-column>
+              <el-table-column prop="type" label="Type" width="180">
+              </el-table-column>
+              <el-table-column prop="desc" label="Description">
+              </el-table-column>
+              <el-table-column prop="example" label="Example">
+              </el-table-column>
             </el-table>
           </el-tab-pane>
           <el-tab-pane label="Evaluation" name="evaluation">
             <p>
-              The following table gives the sizes of test suites, computational costs
-              (seconds) and success rate.
+              The following table gives the sizes of test suites, computational
+              costs (seconds) and success rate.
             </p>
             <el-table
               :data="evaluateData"
@@ -163,16 +179,22 @@
               style="width: 100%; font-size: 1rem"
               :header-cell-style="{ background: '#343a40', color: '#fff' }"
             >
-              <el-table-column prop="category" label="Category"> </el-table-column>
-              <el-table-column prop="strength" label="Strength"> </el-table-column>
-              <el-table-column prop="total_size" label="Total Size"> </el-table-column>
-              <el-table-column prop="total_time" label="Total Time"> </el-table-column>
+              <el-table-column prop="category" label="Category">
+              </el-table-column>
+              <el-table-column prop="strength" label="Strength">
+              </el-table-column>
+              <el-table-column prop="total_size" label="Total Size">
+              </el-table-column>
+              <el-table-column prop="total_time" label="Total Time">
+              </el-table-column>
               <el-table-column prop="success_rate" label="Success Rate">
               </el-table-column>
               <el-table-column fixed="right" label="" width="120">
                 <template #default="scope">
                   <el-button
-                    @click.prevent="handelDetail(serviceInfor.id, scope.row)"
+                    @click.prevent="
+                      handelDetail(serviceInfor.data.id, scope.row)
+                    "
                     type="text"
                   >
                     detail
@@ -181,10 +203,13 @@
               </el-table-column>
             </el-table>
             <!-- 详细信息-->
-            <el-dialog :title="dialogData.dialog_title" v-model="dialogData.detailDialog">
+            <el-dialog
+              :title="dialogData.dialog_title"
+              v-model="dialogData.detailDialog"
+            >
               <p style="margin: 0px">
-                This benchmark set consists of 59 test models. The detailed results can be
-                found in the following table.
+                This benchmark set consists of 59 test models. The detailed
+                results can be found in the following table.
               </p>
               <el-col :span="24" style="margin: 0px">
                 <el-tag
@@ -220,9 +245,9 @@
             <div class="block" style="margin-top: 20px">
               <el-timeline>
                 <el-timeline-item
-                  v-for="item in historyData"
+                  v-for="item in historyData.list"
                   :key="item.id"
-                  :timestamp="item.date"
+                  :timestamp="service_common.getDateFromTime_Day(item.date)"
                   placement="top"
                 >
                   <el-card>
@@ -236,7 +261,9 @@
           <el-tab-pane label="Ratings & Reviews" name="rate_reviews">
             <el-row style="margin-top: 20px">
               <el-col :span="7"
-                ><font style="font-weight: bold; font-size: 1.5rem">Ratings </font>
+                ><font style="font-weight: bold; font-size: 1.5rem"
+                  >Ratings
+                </font>
                 <el-tag
                   effect="dark"
                   style="
@@ -249,7 +276,7 @@
                     border-radius: 20%;
                   "
                 >
-                  {{ serviceInfor.scores }}
+                  {{ serviceInfor.data.scores }}
                 </el-tag>
                 <span style="margin-top: 10px; display: block; color: blue"
                   >{{ rateData.peopleNum }} ratings (out of 5)</span
@@ -272,7 +299,8 @@
             </el-row>
             <el-row>
               <el-col :span="4">
-                <font style="font-weight: bold; font-size: 1.5rem; margin-top: 20px"
+                <font
+                  style="font-weight: bold; font-size: 1.5rem; margin-top: 20px"
                   >Reviews
                 </font>
                 <span style="margin-top: 10px; display: block; color: blue"
@@ -280,7 +308,10 @@
                 >
               </el-col>
 
-              <el-col :span="24" style="padding: 0px; margin-top: 20px; text-align: left">
+              <el-col
+                :span="24"
+                style="padding: 0px; margin-top: 20px; text-align: left"
+              >
                 <el-row style="margin-bottom: 10px">
                   <el-col :span="2">
                     <el-avatar
@@ -310,13 +341,18 @@
                   </el-col>
                 </el-row>
                 <!--评论-->
-                <div v-for="(item, index) in reviewData.commentsData" :key="item.id">
+                <div
+                  v-for="(item, index) in reviewData.commentsData"
+                  :key="item.id"
+                >
                   <el-col :span="2">
                     <el-avatar
                       :size="55"
                       style="font-size: 1.5rem; float: right"
                       v-show="reviewData.showUserimg"
-                      >{{ item.post_name.substr(0, 1).toUpperCase() }}</el-avatar
+                      >{{
+                        item.post_name.substr(0, 1).toUpperCase()
+                      }}</el-avatar
                     >
                   </el-col>
                   <el-col :span="22">
@@ -408,7 +444,8 @@
                         </el-col>
                         <el-col :span="24">
                           <el-label style="float: left; margin: 2%"
-                            ><span style="color: blue">@{{ reply_item.to_name }}: </span
+                            ><span style="color: blue"
+                              >@{{ reply_item.to_name }}: </span
                             >{{ reply_item.content }}</el-label
                           >
                         </el-col>
@@ -440,40 +477,49 @@
               </el-col>
             </el-row>
           </el-tab-pane>
+          <!-- demo -->
           <el-tab-pane label="Demo" name="demo">
             <p>
-              Try to use this service. Simply type in the inputs (exemplary inputs are
-              provided) and click the submit button to obtain the results.
+              Try to use this service. Simply type in the inputs (exemplary
+              inputs are provided) and click the submit button to obtain the
+              results.
             </p>
             <h2 style="margin-top: 30px">
-              Inputs<font style="color: grey; font-weight: 200; font-size: 1.2rem">
+              Inputs<font
+                style="color: grey; font-weight: 200; font-size: 1.2rem"
+              >
                 (in JSON format)</font
               >
             </h2>
             <vue-json-editor
-              :value="reviewData"
+              :value="inputJson.data"
               :showBtns="false"
               :mode="'code'"
               lang="en"
               height="500px"
-              @json-change="onJsonChange"
+              @json-change="onInputJsonChange"
               @json-save="onJsonSave"
             />
-            <el-button type="primary" icon="el-icon-mouse" style="margin-top: 30px"
+            <el-button
+              type="primary"
+              icon="el-icon-mouse"
+              style="margin-top: 30px" @click="useService"
               >Submit</el-button
             >
             <h2 style="margin-top: 30px">
-              Outputs<font style="color: grey; font-weight: 200; font-size: 1.2rem">
+              Outputs<font
+                style="color: grey; font-weight: 200; font-size: 1.2rem"
+              >
                 (in JSON format)</font
               >
             </h2>
             <vue-json-editor
-              :value="reviewData"
+              :value="outputJson.data"
               :showBtns="false"
               :mode="'code'"
               lang="en"
               height="500px"
-              @json-change="onJsonChange"
+              @json-change="onOutputJsonChange"
               @json-save="onJsonSave"
             />
           </el-tab-pane>
@@ -482,17 +528,90 @@
     </el-col>
   </el-row>
 </template>
-
 <script>
 // import ElementPlus from 'element-plus'
 import vueJsonEditor from "vue-json-editor";
 import { useRoute, useRouter } from "vue-router";
-import { reactive } from "vue";
+import { reactive, onMounted } from "vue";
 import serviceTypeList from "./typelist.vue";
 import * as service_common from "./common";
 export default {
   // eslint-disable-next-line no-unused-vars
   setup(props, context) {
+    onMounted(() => {
+      //1.初始化数据
+      //1)用户信息
+      user.id = localStorage.getItem("userid");
+      let userres = service_common.getUserName(user.id);
+      userres.then(function (value) {
+        user.name = value.username;
+        console.log(user);
+      });
+      //2)收藏数量
+      let starNumres = service_common.getStarNum(id);
+      starNumres.then(function (value) {
+        starData.starNum = value.starNum;
+        console.log("收藏量：" + value);
+        console.log(value);
+      });
+      //3)是否收藏
+      let starres = service_common.isStared(id, user.id);
+      starres.then(function (value) {
+        console.log(value);
+        starData.isStar = value.star;
+        if (value.star) {
+          starData.starClass = "el-icon-star-on";
+        } else {
+          starData.starClass = "el-icon-star-off";
+        }
+        console.log("收藏情况：");
+        console.log(starData);
+      });
+      //4)服务基本信息
+      let inforres = service_common.getServiceInfor(id);
+      inforres.then(function (value) {
+        serviceInfor.data = value.serviceInfor;
+        let authorres = service_common.getUserName(serviceInfor.data.userId);
+        authorres.then(function (value) {
+          serviceInfor.data.author = value.username;
+        });
+
+        let scoreres = service_common.getScores(id);
+        scoreres.then(function (value) {
+          // console.log(value.username);
+          serviceInfor.data.scores = value.scores;
+          console.log("服务基本信息：");
+          console.log(serviceInfor);
+          updateFormat();
+        });
+        serviceInfor.data.date = service_common.getDateFromTime_Day(
+          serviceInfor.data.date
+        );
+        //5)
+        //6)历史信息historyData
+        let historyres = service_common.getHistoryList(id);
+        historyres.then(function (value) {
+          historyData.list = value.list;
+        });
+        //7)评分
+        let userscoreres = service_common.getUserValuate(id, user.id);
+        userscoreres.then(function (value) {
+          rateData.value = value.score;
+          if (rateData.value != 0) {
+            rateData.disabled = true;
+          }
+        });
+        //8)评论
+        //9)Demo
+        inputJson.data = service_common.XputToJsonFormat(
+          serviceInfor.data.inputFormat
+        );
+        outputJson.data = service_common.XputToJsonFormat(
+          serviceInfor.data.outputFormat
+        );
+      });
+    });
+
     console.log(context);
 
     let starData = reactive({
@@ -500,7 +619,8 @@ export default {
       starClass: "el-icon-star-off",
       starNum: 0,
     });
-    const user = reactive({
+
+    let user = reactive({
       id: 1,
       name: "lejin",
     });
@@ -512,29 +632,31 @@ export default {
     // alert("service")
     //根据id获取数据
     let serviceInfor = reactive({
-      id: 1,
-      title: "ACTS",
-      img:
-        "http://114.55.242.234:8686/CitHub/Ctest/serviceImg/12/13/c8020d7d-cceb-4f39-96d2-7fd9f5b1867facts.png",
-      author: "ligang",
-      version: "1.0",
-      time: "2020.09.01",
-      short_desc:
-        "ACTS is a well-known combinatorial test suite generation tool. This tools was initially developed by NIST, and has been used in many real-world projects and organisations.",
-      description:
-        "ACTS is a well-known combinatorial test suite generation tool. This tools was initially developed by NIST, and has been used in many real-world projects and organisations.",
-      scores: 4.7,
-      tags: "Generation, Greedy",
-      url: "http://114.55.242.234:8000",
-      license: "MIT",
-      repository: "https://github.com/lejinWang/real_acts3.git",
-      input_format: `strength|int|the covering strength|2
+      data: {
+        id: 69,
+        title: "ACTS",
+        img:
+          "https://findicons.com/files/icons/2787/beautiful_flat_icons/128/hourglass.png",
+        author: "ligang",
+        version: "1.0",
+        date: "2020.09.01",
+        shortDest:
+          "ACTS is a well-known combinatorial test suite generation tool. This tools was initially developed by NIST, and has been used in many real-world projects and organisations.",
+        description:
+          "ACTS is a well-known combinatorial test suite generation tool. This tools was initially developed by NIST, and has been used in many real-world projects and organisations.",
+        scores: 4.7,
+        tags: "Generation, Greedy",
+        url: "http://114.55.242.234:8000",
+        license: "MIT",
+        repository: "https://github.com/lejinWang/real_acts3.git",
+        inputFormat: `strength|int|the covering strength|2
 parameter|int|the number of parameters|3
 values|int[]|the number of choices of each parameter|[2,6,3]
 constraints|string[]|constraints of model|[["0/0","1/0"],["0/0","1/1"],["0/0","1/2"],["0/0","1/3"]]`,
-      output_format: `testsuite|int[][]|the generated covering array| [[0,0, 0]]
+        outputFormat: `testsuite|int[][]|the generated covering array| [[0,0, 0]]
 size|int|size of test suite|8
 time|string|computational cost (ms)|12`,
+      },
     });
 
     const goHome = () => {
@@ -554,39 +676,43 @@ time|string|computational cost (ms)|12`,
     };
     //详细信息
     //1.处理输入输出格式
-    let xput_format = reactive({
+    let xputFormat = reactive({
       input: [],
       output: [],
     });
-    // eslint-disable-next-line no-unused-vars
-    serviceInfor.input_format.split("\n").forEach(function (item, index) {
+    console.log("sss\n",serviceInfor.data.inputFormat)
+    const updateFormat=()=>{
+    console.log(serviceInfor.data.inputFormat)
+        // eslint-disable-next-line no-unused-vars
+    serviceInfor.data.inputFormat.split("\n").forEach(function (item, index) {
       let tempdata = {
         parameter: "parameter",
         type: "type",
         desc: "desc",
         example: "example",
       };
-      tempdata.parameter = item.split("|")[0];
-      tempdata.type = item.split("|")[1];
-      tempdata.desc = item.split("|")[2];
-      tempdata.example = item.split("|")[3];
-      xput_format.input.push(tempdata);
+      tempdata.parameter = item.split(";")[0];
+      tempdata.type = item.split(";")[1];
+      tempdata.desc = item.split(";")[2];
+      tempdata.example = item.split(";")[3];
+      xputFormat.input.push(tempdata);
       // console.log(tempdata)
     });
     // eslint-disable-next-line no-unused-vars
-    serviceInfor.output_format.split("\n").forEach(function (item, index) {
+    serviceInfor.data.outputFormat.split("\n").forEach(function (item, index) {
       let tempdata = {
         parameter: "parameter",
         type: "type",
         desc: "desc",
         example: "example",
       };
-      tempdata.parameter = item.split("|")[0];
-      tempdata.type = item.split("|")[1];
-      tempdata.desc = item.split("|")[2];
-      tempdata.example = item.split("|")[3];
-      xput_format.output.push(tempdata);
+      tempdata.parameter = item.split(";")[0];
+      tempdata.type = item.split(";")[1];
+      tempdata.desc = item.split(";")[2];
+      tempdata.example = item.split(";")[3];
+      xputFormat.output.push(tempdata);
     });
+    }
     // 评估
     let evaluateData = reactive([
       {
@@ -739,22 +865,24 @@ time|string|computational cost (ms)|12`,
       }
     }
     // 历史信息
-    let historyData = reactive([
-      {
-        id: "1",
-        service_id: "1",
-        version: "2.0",
-        description: "second release",
-        date: "2019-05-19",
-      },
-      {
-        id: "2",
-        service_id: "1",
-        version: "1.0",
-        description: "first release",
-        date: "2018-05-19",
-      },
-    ]);
+    let historyData = reactive({
+      list: [
+        {
+          id: "1",
+          service_id: "1",
+          version: "2.0",
+          description: "second release",
+          date: "2019-05-19",
+        },
+        {
+          id: "2",
+          service_id: "1",
+          version: "1.0",
+          description: "first release",
+          date: "2018-05-19",
+        },
+      ],
+    });
     // 评分
     let rateData = reactive({
       value: 0,
@@ -762,14 +890,14 @@ time|string|computational cost (ms)|12`,
       disabled: false,
       peopleNum: 3,
     });
-    if (rateData.value != 0) {
-      rateData.disabled = true;
-    }
+    // if (rateData.value != 0) {
+    //   rateData.disabled = true;
+    // }
     const handleRate = () => {
       // alert(rateData.value)
       rateData.disabled = true;
-      serviceInfor.scores = parseFloat(
-        (serviceInfor.scores * rateData.peopleNum + rateData.value) /
+      serviceInfor.data.scores = parseFloat(
+        (serviceInfor.data.scores * rateData.peopleNum + rateData.value) /
           (rateData.peopleNum + 1)
       ).toFixed(1);
       rateData.peopleNum++;
@@ -792,65 +920,65 @@ time|string|computational cost (ms)|12`,
           id: 1,
           post_id: 1, // 谁发布的评论
           post_name: "lejin",
-          content: `I think the "&#" symbol might not be the best choice for separation.`,
+          content: `This is a nice tool`,
           date: "2020年10月28日 14:22:33",
           showReply: false,
           // 新回复
 
           reply: [
-            {
-              id: 1,
-              root_id: 1,
-              post_id: 2, // 谁发布的评论
-              post_name: "gist",
-              to_id: 1,
-              to_name: "lejin", //@ 谁
-              content: `I think the "&#" symbol might not be the best choice for separation.`,
-              date: "2020年10月28日 14:22:33",
-            },
-            {
-              id: 1,
-              root_id: 1,
-              post_id: 2, // 谁发布的评论
-              post_name: "gist",
-              to_id: 1,
-              to_name: "lejin", //@ 谁
-              content: `I think the "&#" symbol might not be the best choice for separation.`,
-              date: "2020年10月28日 14:22:33",
-            },
+            // {
+            //   id: 1,
+            //   root_id: 1,
+            //   post_id: 2, // 谁发布的评论
+            //   post_name: "gist",
+            //   to_id: 1,
+            //   to_name: "lejin", //@ 谁
+            //   content: `I think the "&#" symbol might not be the best choice for separation.`,
+            //   date: "2020年10月28日 14:22:33",
+            // },
+            // {
+            //   id: 1,
+            //   root_id: 1,
+            //   post_id: 2, // 谁发布的评论
+            //   post_name: "gist",
+            //   to_id: 1,
+            //   to_name: "lejin", //@ 谁
+            //   content: `I think the "&#" symbol might not be the best choice for separation.`,
+            //   date: "2020年10月28日 14:22:33",
+            // },
           ],
         },
-        {
-          id: 2,
-          post_id: 1, // 谁发布的评论
-          post_name: "lejin",
-          content: `I think the "&#" symbol might not be the best choice for separation.`,
-          date: "2020年10月28日 14:22:33",
-          showReply: false,
-          replyComment: "",
-          reply: [
-            {
-              id: 1,
-              root_id: 1,
-              post_id: 2, // 谁发布的评论
-              post_name: "乐进",
-              to_id: 1,
-              to_name: "lejin", //@ 谁
-              content: `I think the "&#" symbol might not be the best choice for separation.`,
-              date: "2020年10月28日 14:22:33",
-            },
-            {
-              id: 1,
-              root_id: 1,
-              post_id: 2, // 谁发布的评论
-              post_name: "gist",
-              to_id: 1,
-              to_name: "lejin", //@ 谁
-              content: `I think the "&#" symbol might not be the best choice for separation.`,
-              date: "2020年10月28日 14:22:33",
-            },
-          ],
-        },
+        // {
+        //   id: 2,
+        //   post_id: 1, // 谁发布的评论
+        //   post_name: "lejin",
+        //   content: `I think the "&#" symbol might not be the best choice for separation.`,
+        //   date: "2020年10月28日 14:22:33",
+        //   showReply: false,
+        //   replyComment: "",
+        //   reply: [
+        //     {
+        //       id: 1,
+        //       root_id: 1,
+        //       post_id: 2, // 谁发布的评论
+        //       post_name: "乐进",
+        //       to_id: 1,
+        //       to_name: "lejin", //@ 谁
+        //       content: `I think the "&#" symbol might not be the best choice for separation.`,
+        //       date: "2020年10月28日 14:22:33",
+        //     },
+        //     {
+        //       id: 1,
+        //       root_id: 1,
+        //       post_id: 2, // 谁发布的评论
+        //       post_name: "gist",
+        //       to_id: 1,
+        //       to_name: "lejin", //@ 谁
+        //       content: `I think the "&#" symbol might not be the best choice for separation.`,
+        //       date: "2020年10月28日 14:22:33",
+        //     },
+        //   ],
+        // },
       ],
     });
     const addNewComment = () => {
@@ -902,7 +1030,25 @@ time|string|computational cost (ms)|12`,
     } else {
       reviewData.showUserimg = true;
     }
+    //Demo
+    const inputJson = reactive({
+      data: {},
+    });
+    const outputJson = reactive({
+      data: {},
+    });
+
+    const useService=()=>{
+       console.log(inputJson.data)
+       outputJson.data={}
+       let useres=service_common.useService(inputJson.data,serviceInfor.data.url)
+       useres.then(function(value){
+         outputJson.data=value
+       })
+    }
+
     return {
+      service_common,
       addNewComment,
       addNewReply,
       user,
@@ -916,17 +1062,30 @@ time|string|computational cost (ms)|12`,
       goHome,
       starData,
       starClick,
-      xput_format,
+      xputFormat,
       tabsActiveName: "details",
       dialogData,
       evaluateData,
       evaluateDetailData,
       handelDetail,
+      inputJson,
+      outputJson,
+      useService
     };
   },
   components: {
     serviceTypeList,
     vueJsonEditor,
+  },
+  methods: {
+    onInputJsonChange(value) {
+      this.inputJson.data=value
+      // console.log(this.inputJson)
+    },
+    onOutputJsonChange (value) {
+             this.outputJson.data=value
+      // console.log(this.outputJson)
+        },
   },
 };
 </script>

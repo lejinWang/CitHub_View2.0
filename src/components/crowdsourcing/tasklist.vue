@@ -2,11 +2,11 @@
   <div>
  <el-card shadow="always" v-for="task in taskListData" :key="task.title" style="margin-bottom: 20px">
             <el-row
-              > <el-col span="24"
+              > <el-col span="24" style="    width: 100%;"
                 ><h3 ><a  href="#" @click.prevent="taskInfor(task.id)">{{ task.title }}</a>
                 </h3>
                 <div class="tag-group">
-                  <el-tag v-for="item in task.tags.split(',')" :key="item" effect="dark" style="margin-right: 10px; height: 20px; font-size: 10px;    padding: 0px 5px 2px; display: unset">
+                  <el-tag v-for="item in task.tag.split(',')" :key="item" effect="dark" style="margin-right: 10px; height: 20px; font-size: 10px;    padding: 0px 5px 2px; display: unset">
                     {{ item }}
                   </el-tag>
                 </div>
@@ -17,7 +17,7 @@
                       <strong class="text-dark"
                         ><a href="ModuleOfUser/user_public.html?userId=12">{{ task.author }}</a></strong
                       >
-                      on <strong class="text-dark">{{ task.time }}</strong></span
+                      on <strong class="text-dark">{{ task.date }}</strong></span
                     ></el-col
                   ></el-row
                 >

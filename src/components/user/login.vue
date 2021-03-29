@@ -9,7 +9,12 @@
       </h1>
     </div>
     <div class="loginCard">
-      <el-form :model="userForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+      <el-form
+        :model="userForm"
+        :rules="rules"
+        ref="ruleForm"
+        class="demo-ruleForm"
+      >
         <el-form-item label="" prop="username" label-position="top">
           <el-label>Username</el-label>
 
@@ -25,7 +30,7 @@
             type="primary"
             class="loginBtn"
             icon="el-icon-mouse"
-            @click="submitForm('userForm')"
+            @click="submitForm('ruleForm')"
             >Sign in</el-button
           >
         </el-form-item>
@@ -39,40 +44,78 @@
 </template>
 
 <script>
-import {} from "vue";
+import { getCurrentInstance, reactive } from "vue";
+import { request } from "./request";
+import { ElMessage } from "element-plus";
 export default {
   setup() {
-    return {};
+    let userForm = reactive({
+      username: "",
+      password: "",
+      userid: "",
+      valid: true,
+    });
+    let rules = reactive({
+      username: [
+        { required: true, message: "please input username", trigger: "blur" },
+      ],
+      password: [
+        { required: true, message: "please input password", trigger: "blur" },
+      ],
+    });
+    const { ctx } = getCurrentInstance();
+    console.log(ctx);
+
+    return { userForm, rules, request };
   },
   data() {
-    return {
-      userForm: {
-        username: "",
-        password: "",
-        userid: "",
-      },
-      rules: {
-        username: [
-          { required: true, message: "please input username", trigger: "blur" },
-          { min: 3, max: 5, message: "At least 3 characters", trigger: "blur" },
-        ],
-        password: [{ required: true, message: "please input password", trigger: "blur" }],
-      },
-    };
+    return {};
   },
   methods: {
     // eslint-disable-next-line no-unused-vars
     submitForm(formName) {
-      localStorage.setItem("userid", 1);
-      this.$router.push({ path: "/" });
-      // this.$refs[formName].validate((valid) => {
-      //   if (valid) {
-      //     alert("submit!");
-      //   } else {
-      //     console.log("error submit!!");
-      //     return false;
-      //   }
-      // });
+      // localStorage.setItem("userid", 1);
+      // this.$router.push({ path: "/" });
+      this.$refs[formName].validate((valid) => {
+        //  alert(valid)
+        if (valid) {
+          var that = this;
+          let res = this.checkLogin(
+            this.userForm.username,
+            this.userForm.password
+          );
+          res.then(function (result) {
+            // console.log(result);
+            // alert(result.user)
+            if (result.user != null) {
+              localStorage.setItem("userid", result.user.id);
+              that.$router.push({ path: "/" });
+               ElMessage.success({
+                message: "login success",
+                type: "success",
+              });
+        
+            } else {
+              // alert("username or password is error!")
+              ElMessage.error({
+                message: "username or password is error",
+                type: "error",
+              });
+            }
+          });
+        }
+      });
+    },
+    // eslint-disable-next-line no-unused-vars
+    checkLogin(username, password) {
+      return request({
+        url: "/user/information/login",
+        method: "post",
+        data: {
+          name: username,
+          password: password,
+        },
+      });
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

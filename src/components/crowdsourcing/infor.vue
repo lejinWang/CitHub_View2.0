@@ -4,32 +4,32 @@
     <el-col :xs="{ span: 24, offset: 0 }" :sm="{ span: 24, offset: 0 }" :md="{ span: 17, offset: 1 }" :lg="{ span: 17, offset: 1 }" :xl="{ span: 17, offset: 1 }">
       <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
         <el-breadcrumb-item :to="{ path: '/task_index' }" @click="goHome">Task</el-breadcrumb-item>
-        <el-breadcrumb-item>{{ taskInfor.title }}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ taskInfor.infor.title }}</el-breadcrumb-item>
       </el-breadcrumb>
       <el-col :xs="{ span: 12, offset: 0 }" :sm="{ span: 12, offset: 0 }" :md="{ span: 18, offset: 0 }" :lg="{ span: 18, offset: 0 }" :xl="{ span: 20, offset: 0 }">
         <el-col :span="24"
-          ><h1 style="float: left">{{ taskInfor.title }}</h1>
+          ><h1 style="float: left">{{ taskInfor.infor.title }}</h1>
         </el-col>
         <el-col :span="24" style="margin-bottom: 10px">
-          <el-tag v-for="item in taskInfor.tags.split(',')" :key="item" effect="dark" style="margin-right: 10px; height: 20px; font-size: 10px; padding: 0px 5px 2px; display: unset">
+          <el-tag v-for="item in taskInfor.infor.tag.split(',')" :key="item" effect="dark" style="margin-right: 10px; height: 20px; font-size: 10px; padding: 0px 5px 2px; display: unset">
             {{ item }}
           </el-tag>
         </el-col>
         <el-col :span="24" style="margin-bottom: 10px">
           <label>
-            Author: <author>{{ taskInfor.author }} </author>
+            Author: <author>{{ taskInfor.infor.author }} </author>
           </label>
           <label>
-            Last Updated: <updatetime>{{ taskInfor.time }} </updatetime>
+            Last Updated: <updatetime>{{ taskInfor.infor.date }} </updatetime>
           </label>
         </el-col>
         <el-col :span="24" style="margin-bottom: 20px">
-          {{ taskInfor.description }}
+          {{ taskInfor.infor.description }}
         </el-col>
         <el-col :span="24" style="margin-bottom: 10px; z-index: 0">
           <el-tabs v-model="tabsActiveName" type="card" @tab-click="handleClick">
             <el-tab-pane label="Details" name="detail">
-              <p>{{ taskInfor.description }}</p>
+              <p>{{ taskInfor.infor.description }}</p>
             </el-tab-pane>
             <el-tab-pane label="Solutions" name="second">
             <p style="font-size:1.2rem;color:grey">
@@ -135,13 +135,31 @@
 </template>
 
 <script>
-import { reactive, ref } from "vue";
+import { reactive, ref,onMounted } from "vue";
 import * as task_common from "./common";
 import tagList from "./taglist.vue";
-import { useRouter } from "vue-router";
+import { useRouter,useRoute } from "vue-router";
 // import { useRoute, useRouter } from "vue-router";
 export default {
   setup() {
+     onMounted(() => {
+      // eslint-disable-next-line no-unused-vars
+      let res = task_common.getTaskById(id);
+      res.then(function (data) {
+        taskInfor.infor=data.infor
+         let authorres = task_common.getUserName(taskInfor.infor.posterId);
+        authorres.then(function (value) {
+          taskInfor.infor.author = value.username;
+        });
+         taskInfor.infor.date = task_common.getDateFromTime_Day(
+          taskInfor.infor.date
+        );
+
+        
+      });
+      console.log("初始化数据");
+    });
+
     const user = reactive({
       id: 1,
       name: "lejin",
@@ -150,14 +168,17 @@ export default {
     const goHome = () => {
       router.push({ path: "/task_index" });
     };
+    const route = useRoute();
+    const id = route.query.id;//task id
     let taskInfor = reactive({
+      infor:{
       id: 1,
       title: "ACTS",
       author: "ligang",
       time: task_common.getNowDate(),
       description: "ACTS is a well-known combinatorial test suite generation tool. This tools was initially developed by NIST, and has been used in many real-world projects and organisations.",
-      tags: "generation,ACTS",
-    });
+      tag: "generation,ACTS",
+    }});
     let reviewData = reactive({
       peopleNum: 1,
       content: "",

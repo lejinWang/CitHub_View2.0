@@ -26,23 +26,36 @@
 </template>
 
 <script>
-import { reactive } from "vue";
+import { reactive,onMounted } from "vue";
+import{getTypes} from "./common"
 // import { useRouter } from 'vue-router';
 export default {
   setup() {
     // const router=useRouter()
     console.log("加载typelist");
+    //1.加载list
+    onMounted(() => {
+      let res=getTypes()
+       res.then(function (result) {
+         typedata.types=result.typelist
+       })
+      console.log('组件已挂载')
+    })
+
+
     const typedata = reactive({
       types: [
-        "Modeling",
-        "Generation",
-        "Prioritisation",
-        "Selection & Reduction",
-        "Evaluation",
-        "Input & Output Connector",
-        "Other",
+        // "Modeling",
+        // "Generation",
+        // "Prioritisation",
+        // "Selection & Reduction",
+        // "Evaluation",
+        // "Input & Output Connector",
+        // "Other",
       ],
     });
+    
+    //点击相应的类型
     function typeClick(type) {
       // alert(type)
       window.router.push({ path: "/service_type", query: { type } });
@@ -54,7 +67,7 @@ export default {
     function customisationClick() {
       window.router.push({ path: "/service_customisation" });
     }
-    return { customisationClick, uploadClick, typedata, typeClick };
+    return { customisationClick, uploadClick, typedata, typeClick,getTypes };
   },
   methods: {},
   components: {},
@@ -82,7 +95,7 @@ export default {
   padding: 0.5rem 1rem;
   font-size: 1rem;
   font-weight: 500;
-
+   
   color: #007bff !important;
   margin: 0px;
   padding-top: 0;

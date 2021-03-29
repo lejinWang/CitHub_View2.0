@@ -41,7 +41,7 @@
               {{ item }}
             </el-tag>
           </div>
-          <p>{{ service.desc }}</p>
+          <p>{{ service.shortDesc }}</p>
           <el-row
             ><el-col
               :xs="{ span: 24, offset: 0 }"
@@ -70,7 +70,7 @@
                     service.author
                   }}</a></strong
                 >
-                on <strong class="text-dark">{{ service.time }}</strong></span
+                on <strong class="text-dark">{{ service.date }}</strong></span
               ></el-col
             ></el-row
           >
@@ -100,8 +100,10 @@ export default {
     const serviceInfor = (id) => {
       window.router.push({ path: "/service_infor", query: { id } });
     };
-
-    return { props, serviceInfor };
+    const reloadData = () => {
+      console.log(props.serviceList)
+    };
+    return { props, serviceInfor,reloadData };
   },
   components: {},
 };

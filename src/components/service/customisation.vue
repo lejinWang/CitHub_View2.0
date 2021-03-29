@@ -16,11 +16,13 @@
     :xl="{ span: 17, offset: 1 }"
   >
     <div style="margin-bottom: 30px; width: 100%">
-      <h1 style="font-size: 1.75rem; margin-top: 10px">Service Customisation</h1>
+      <h1 style="font-size: 1.75rem; margin-top: 10px">
+        Service Customisation
+      </h1>
       <p class="text-secondary" style="">
-        Service composition enables an agile and dynamic way to develop and grow software.
-        Different services in CitHub can be combined together to accomplish particular
-        testing processes.
+        Service composition enables an agile and dynamic way to develop and grow
+        software. Different services in CitHub can be combined together to
+        accomplish particular testing processes.
       </p>
 
       <el-steps
@@ -49,7 +51,9 @@
           <div style="box-shadow: 2px 2px 5px #9696964d" class="grid-content">
             <h2 style="margin: 0px 10px">{{ item.type }}</h2>
             <div style="padding: 10px">
-              <p class="text-secondary" style="height: 162px">{{ item.desc }}</p>
+              <p class="text-secondary" style="height: 162px">
+                {{ item.desc }}
+              </p>
               <div>
                 <el-button
                   v-show="!item.selected"
@@ -77,7 +81,9 @@
         style="border: 2px"
       >
         <h2 style="margin-top: 30px">Step 2: Identify Services</h2>
-        <p class="simpleText">Please identify the services that will be assembled ...</p>
+        <p class="simpleText">
+          Please identify the services that will be assembled ...
+        </p>
 
         <el-col :span="24"
           ><div class="grid-content"><b>Sequence Workflow</b></div></el-col
@@ -116,9 +122,14 @@
         </el-col>
       </el-col>
 
-      <el-col :span="24" v-show="active == 1 && customisationData.stepOne[1].selected">
+      <el-col
+        :span="24"
+        v-show="active == 1 && customisationData.stepOne[1].selected"
+      >
         <h2 style="margin-top: 30px">Step 2: Identify Services</h2>
-        <p class="simpleText">Please identify the services that will be assembled ...</p>
+        <p class="simpleText">
+          Please identify the services that will be assembled ...
+        </p>
 
         <el-col :span="24"
           ><div class="grid-content"><b>Parallel Workflow</b></div></el-col
@@ -157,10 +168,14 @@
         </el-col>
       </el-col>
 
-      <el-col :span="24" v-show="active == 2 && customisationData.stepOne[0].selected">
+      <el-col
+        :span="24"
+        v-show="active == 2 && customisationData.stepOne[0].selected"
+      >
         <h2 style="margin-top: 30px">Step 3: Service Execution</h2>
         <p class="simpleText">
-          Simply type in the inputs and click the submit button to obtain the results ...
+          Simply type in the inputs and click the submit button to obtain the
+          results ...
         </p>
         <el-col :span="24"
           ><div class="grid-content"><b>Sequence Workflow</b></div></el-col
@@ -191,10 +206,14 @@
         </el-col>
       </el-col>
 
-      <el-col :span="24" v-show="active == 2 && customisationData.stepOne[1].selected">
+      <el-col
+        :span="24"
+        v-show="active == 2 && customisationData.stepOne[1].selected"
+      >
         <h2 style="margin-top: 30px">Step 3: Service Execution</h2>
         <p class="simpleText">
-          Simply type in the inputs and click the submit button to obtain the results ...
+          Simply type in the inputs and click the submit button to obtain the
+          results ...
         </p>
         <el-col :span="24"
           ><div class="grid-content"><b>Parallel Workflow</b></div></el-col
@@ -231,15 +250,19 @@
           >
         </h2>
         <vue-json-editor
-          :value="customisationData"
+          :value="inputFormatForCom.data"
           :showBtns="false"
           :mode="'code'"
           lang="en"
           height="500px"
-          @json-change="onJsonChange"
-          @json-save="onJsonSave"
+          @json-change="onInputJsonChange"
+          @json-save="onInputJsonSave"
         />
-        <el-button type="primary" icon="el-icon-mouse" style="margin-top: 30px"
+        <el-button
+          type="primary"
+          icon="el-icon-mouse"
+          style="margin-top: 30px"
+          @click="useService"
           >Submit</el-button
         >
         <h2 style="margin-top: 30px">
@@ -248,13 +271,13 @@
           >
         </h2>
         <vue-json-editor
-          :value="customisationData"
+          :value="outputFormatForCom.data"
           :showBtns="false"
           :mode="'code'"
           lang="en"
           height="500px"
-          @json-change="onJsonChange"
-          @json-save="onJsonSave"
+          @json-change="onoutputJsonChange"
+          @json-save="onoutputJsonSave"
         />
       </el-col>
 
@@ -291,6 +314,7 @@
             v-model="chooseDialog.serviceChooseType"
             placeholder=""
             style="width: 90%"
+            @change="onChooseType"
           >
             <el-option
               v-for="(item, index) in chooseDialog.serviceType"
@@ -302,7 +326,11 @@
         </el-form-item>
       </el-col>
       <el-col :span="11" :offset="0" style="height: 237px; overflow: auto">
-        <a href="#" @click.prevent="addService"
+        <a
+          href="#"
+          @click.prevent="addService(service)"
+          v-for="service in serviceListType.data"
+          :key="service.title"
           ><div
             class="grid-content"
             style="
@@ -315,101 +343,13 @@
           >
             <img
               style="float: left"
-              src="http://114.55.242.234:8686/CitHub/Ctest/serviceImg/input.png"
+              :src="service.img"
               width="30"
               height="30"
             />
-            <b style="float: left; margin-left: 10px; margin-top: 5px"
-              >ACTS Format Reader</b
-            >
-          </div></a
-        >
-        <a href="#" @click.prevent="addService"
-          ><div
-            class="grid-content"
-            style="
-              float: left;
-              height: 30px;
-              margin-top: 1px;
-              width: 84%;
-              background-color: #fff;
-            "
-          >
-            <img
-              style="float: left"
-              src="http://114.55.242.234:8686/CitHub/Ctest/serviceImg/input.png"
-              width="30"
-              height="30"
-            />
-            <b style="float: left; margin-left: 10px; margin-top: 5px"
-              >ACTS Format Reader</b
-            >
-          </div></a
-        >
-        <a href="#" @click.prevent="addService"
-          ><div
-            class="grid-content"
-            style="
-              float: left;
-              height: 30px;
-              margin-top: 1px;
-              width: 84%;
-              background-color: #fff;
-            "
-          >
-            <img
-              style="float: left"
-              src="http://114.55.242.234:8686/CitHub/Ctest/serviceImg/input.png"
-              width="30"
-              height="30"
-            />
-            <b style="float: left; margin-left: 10px; margin-top: 5px"
-              >ACTS Format Reader</b
-            >
-          </div></a
-        >
-        <a href="#" @click.prevent="addService"
-          ><div
-            class="grid-content"
-            style="
-              float: left;
-              height: 30px;
-              margin-top: 1px;
-              width: 84%;
-              background-color: #fff;
-            "
-          >
-            <img
-              style="float: left"
-              src="http://114.55.242.234:8686/CitHub/Ctest/serviceImg/input.png"
-              width="30"
-              height="30"
-            />
-            <b style="float: left; margin-left: 10px; margin-top: 5px"
-              >ACTS Format Reader</b
-            >
-          </div></a
-        >
-        <a href="#" @click.prevent="addService"
-          ><div
-            class="grid-content"
-            style="
-              float: left;
-              height: 30px;
-              margin-top: 1px;
-              width: 84%;
-              background-color: #fff;
-            "
-          >
-            <img
-              style="float: left"
-              src="http://114.55.242.234:8686/CitHub/Ctest/serviceImg/input.png"
-              width="30"
-              height="30"
-            />
-            <b style="float: left; margin-left: 10px; margin-top: 5px"
-              >ACTS Format Reader</b
-            >
+            <b style="float: left; margin-left: 10px; margin-top: 5px">{{
+              service.title
+            }}</b>
           </div></a
         >
       </el-col>
@@ -417,7 +357,9 @@
     <template #footer>
       <span class="dialog-footer" style="margin-top: 20px">
         <el-button @click="chooseDialog.show = false">EXIT</el-button>
-        <el-button type="primary" @click="chooseDialog.show = false">OK</el-button>
+        <el-button type="primary" @click="chooseDialog.show = false"
+          >OK</el-button
+        >
       </span>
     </template>
   </el-dialog>
@@ -446,14 +388,25 @@
     </el-form>
   </el-drawer>-->
 </template>
-
 <script>
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import serviceTypeList from "./typelist.vue";
 import * as service_common from "./common";
 import vueJsonEditor from "vue-json-editor";
+import {request} from "./request"
 export default {
   setup() {
+    onMounted(() => {
+      //0.初始化
+      serviceList.Sequence = [];
+      serviceList.Parallel = [];
+      //1.获取类型
+      let res = service_common.getTypes();
+      res.then(function (result) {
+        chooseDialog.serviceType = result.typelist;
+        onChooseType(result.typelist[0]);
+      });
+    });
     const customisationData = reactive({
       stepOne: [
         {
@@ -480,6 +433,7 @@ export default {
         customisationData.stepOne[0].selected = false;
         serviceList.Sequence = [];
       }
+      serviceList.serviceId=[]
     };
     const active = ref(0);
     //setp2
@@ -489,8 +443,22 @@ export default {
       serviceType: ["Modeling", "Generation"],
       serviceChooseType: "Modeling",
     });
+    const serviceListType = reactive({
+      data: [
+        {
+          id: 1,
+          title: "ACTS",
+          img:
+            "https://findicons.com/files/icons/2787/beautiful_flat_icons/128/hourglass.png",
+          author: "ligang",
+          version: "1.0",
+          time: "2020.09.01",
+        },
+      ],
+    });
 
     const serviceList = reactive({
+      serviceId:[],
       Sequence: [
         {
           id: 1,
@@ -541,6 +509,12 @@ export default {
       version: "1.0",
       time: "2020.09.01",
     };
+    const onChooseType = (value) => {
+      let res = service_common.getServiceListByType(value);
+      res.then(function (data) {
+        serviceListType.data = data.list;
+      });
+    };
     const addFunc = () => {
       chooseDialog.show = true;
       chooseShow.value = true;
@@ -548,21 +522,87 @@ export default {
       // customisationData.stepOne[0].selected?serviceList.Sequence=service_common.list_add(serviceList.Sequence,temdata)
       // :serviceList.Parallel=service_common.list_add(serviceList.Parallel,temdata)
     };
-    const addService = () => {
+    const addService = (value) => {
+      console.log(value);
+      temdata = value;
       customisationData.stepOne[0].selected
-        ? (serviceList.Sequence = service_common.list_add(serviceList.Sequence, temdata))
-        : (serviceList.Parallel = service_common.list_add(serviceList.Parallel, temdata));
+        ? (serviceList.Sequence = service_common.list_add(
+            serviceList.Sequence,
+            temdata
+          ))
+        : (serviceList.Parallel = service_common.list_add(
+            serviceList.Parallel,
+            temdata
+          ));
+
+      serviceList.serviceId.push(value.id)
     };
     const removeFunc = (index) => {
       // alert(index)
       customisationData.stepOne[0].selected
-        ? (serviceList.Sequence = service_common.list_remove(serviceList.Sequence, index))
+        ? (serviceList.Sequence = service_common.list_remove(
+            serviceList.Sequence,
+            index
+          ))
         : (serviceList.Parallel = service_common.list_remove(
             serviceList.Parallel,
             index
           ));
+      serviceList.serviceId=service_common.list_remove(serviceList.serviceId,index);
     };
+    const inputFormatForCom = reactive({
+      data: {
+        strength: 2,
+        parameter: 3,
+        values: [2, 5, 3],
+        constraints: [
+          ["0/0", "1/0"],
+          ["0/0", "1/1"],
+          ["0/0", "1/2"],
+          ["0/0", "1/3"],
+        ],
+      },
+    });
+    const outputFormatForCom = reactive({
+      data: {
+        testsuite: [[0, 0, 0]],
+        size: 8,
+        time: "12",
+      },
+    });
+    const useService = () => {
+      var jsonData=inputFormatForCom.data
+      jsonData["ServiceId"]=serviceList.serviceId
+      var str="Sequence"
+      if (customisationData.stepOne[0].selected) {
+          str="Sequence"
+      }
+      else{
+        str="Parallel"
+      }
+
+      let useres=request(
+          {
+            url: "/service/infor/combine/" + str,
+            method: "post",
+            data: JSON.stringify(jsonData),
+          },
+          "/serviceapi"
+        );
+        useres.then(function(value){
+          console.log("useres",value)
+         outputFormatForCom.data=JSON.parse(value.data)
+        })
+
+      // console.log("serviceList",serviceList)
+      // console.log("inputJson",inputFormatForCom.data)
+    };
+
     return {
+      useService,
+      inputFormatForCom,
+      outputFormatForCom,
+      serviceListType,
       addService,
       chooseShow,
       chooseDialog,
@@ -572,15 +612,131 @@ export default {
       chooseType,
       customisationData,
       active,
+      onChooseType,
     };
   },
   methods: {
     next() {
       if (this.active++ > 1) this.active = 2;
+      if (this.active == 2) {
+        //串行
+        if (this.customisationData.stepOne[0].selected) {
+          // alert("串行");
+          this.setInputAndOutputForSeq();
+        } else {
+          // alert("并行");
+          this.setInputAndOutputForPara();
+        }
+      }
     },
     previous() {
       if (this.active-- < 1) this.active = 0;
     },
+    //组合使用时输入输出
+    setInputAndOutputForPara() {
+      this.inputFormatForCom.data = {};
+      this.outputFormatForCom.data = {};
+      for (var i = 0; i < this.serviceList.Parallel.length; i++) {
+        var service = this.serviceList.Parallel[i];
+        var inputJson = service_common.XputToJsonFormat(service.inputFormat);
+        var outputJson = service_common.XputToJsonFormat(service.outputFormat);
+        for (var item in inputJson) {
+          // //console.log(item);
+          if (
+            !Object.prototype.hasOwnProperty.call(
+              this.inputFormatForCom.data,
+              item
+            )
+          ) {
+            this.inputFormatForCom.data[item] = inputJson[item];
+          }
+        }
+        for (var item2 in outputJson) {
+          // //console.log(item);
+          if (
+            !Object.prototype.hasOwnProperty.call(
+              this.outputFormatForCom.data,
+              item2
+            )
+          ) {
+            this.outputFormatForCom.data[item2] = outputJson[item2];
+          }
+        }
+      }
+      console.log(
+        JSON.stringify(this.inputFormatForCom.data) +
+          "|" +
+          JSON.stringify(this.outputFormatForCom.data)
+      );
+    },
+    setInputAndOutputForSeq() {
+      this.inputFormatForCom.data = {};
+      this.outputFormatForCom.data = {};
+      for (var i = 0; i < this.serviceList.Sequence.length; i++) {
+        var service = this.serviceList.Sequence[i];
+        var outputJson = service_common.XputToJsonFormat(service.outputFormat);
+
+        for (var item in outputJson) {
+          // //console.log(item);
+          if (
+            !Object.prototype.hasOwnProperty.call(
+              this.outputFormatForCom.data,
+              item
+            )
+          )
+            this.outputFormatForCom.data[item] = outputJson[item];
+        }
+      }
+
+      for (var i2 = 0; i < this.serviceList.Sequence.length; i2++) {
+        var service2 = this.serviceList.Sequence[i2];
+        var inputJson = service_common.XputToJsonFormat(service2.inputFormat);
+        for (var item2 in inputJson) {
+          if (
+            !Object.prototype.hasOwnProperty.call(
+              this.inputFormatForCom.data,
+              item2
+            )
+          ) {
+            if (
+              !Object.prototype.hasOwnProperty.call(
+                this.outputFormatForCom.data,
+                item
+              )
+            ) {
+              this.inputFormatForCom.data[item] = inputJson[item];
+            }
+          }
+        }
+      }
+      var firstService = this.serviceList.Sequence[0];
+      var firstInputJson = service_common.XputToJsonFormat(
+        firstService.inputFormat
+      );
+      for (var item3 in firstInputJson) {
+        // //console.log(item);
+        this.inputFormatForCom.data[item3] = firstInputJson[item3];
+      }
+      //只显示最后一个服务的输出
+      this.outputFormatForCom.data = service_common.XputToJsonFormat(
+        this.serviceList.Sequence[this.serviceList.Sequence.length - 1]
+          .outputFormat
+      );
+      console.log(
+        JSON.stringify(this.inputFormatForCom.data) +
+          "|" +
+          JSON.stringify(this.outputFormatForCom.data)
+      );
+    },
+    onInputJsonChange(value) {
+      this.inputFormatForCom.data=value
+      // console.log(this.inputJson)
+    },
+    onOutputJsonChange (value) {
+      this.outputFormatForCom.data=value
+      // console.log(this.outputJson)
+        },
+  
   },
   components: { serviceTypeList, vueJsonEditor },
   directives: {
@@ -591,6 +747,7 @@ export default {
       },
     },
   },
+  
 };
 </script>
 <style>

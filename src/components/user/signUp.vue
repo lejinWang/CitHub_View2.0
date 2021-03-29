@@ -10,10 +10,20 @@
     </div>
     <div class="loginCard">
       <div style="width: 340px; margin: 0 auto">
-        <el-form :model="userForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+        <el-form
+          :model="userForm"
+          :rules="rules"
+          ref="ruleForm"
+          class="demo-ruleForm"
+        >
           <el-form-item label="" prop="username" label-position="top">
             <el-label>Username</el-label>
-            <el-popover ref="popover" placement="right" :width="200" trigger="focus">
+            <el-popover
+              ref="popover"
+              placement="right"
+              :width="200"
+              trigger="focus"
+            >
               <p>Please enter a reasonable name (At least 3 characters)</p>
               <template #reference>
                 <el-input v-model="userForm.username"></el-input>
@@ -22,7 +32,12 @@
           </el-form-item>
           <el-form-item label="" prop="mail" label-position="top">
             <el-label>Email</el-label>
-            <el-popover ref="popover" placement="right" :width="200" trigger="focus">
+            <el-popover
+              ref="popover"
+              placement="right"
+              :width="200"
+              trigger="focus"
+            >
               <p>Please enter a reasonable mailbox format</p>
               <template #reference>
                 <el-input type="email" v-model="userForm.mail"></el-input>
@@ -31,19 +46,33 @@
           </el-form-item>
           <el-form-item label="" prop="password" label-position="top">
             <el-label>Password</el-label>
-            <el-popover ref="popover" placement="right" :width="200" trigger="focus">
+            <el-popover
+              ref="popover"
+              placement="right"
+              :width="200"
+              trigger="focus"
+            >
               <p>
-                8-16 characters, including numeric upper and lower case letters. No
-                continuous characters or more than three identical characters can appear
+                8-16 characters, including numeric upper and lower case letters.
+                No continuous characters or more than three identical characters
+                can appear
               </p>
               <template #reference>
-                <el-input type="password" v-model="userForm.password"></el-input>
+                <el-input
+                  type="password"
+                  v-model="userForm.password"
+                ></el-input>
               </template>
             </el-popover>
           </el-form-item>
           <el-form-item label="" prop="institution" label-position="top">
             <el-label>Institution</el-label>
-            <el-popover ref="popover" placement="right" :width="200" trigger="focus">
+            <el-popover
+              ref="popover"
+              placement="right"
+              :width="200"
+              trigger="focus"
+            >
               <p>Please enter a reasonable institution</p>
               <template #reference>
                 <el-input v-model="userForm.institution"></el-input> </template
@@ -54,13 +83,14 @@
               type="primary"
               class="loginBtn"
               icon="el-icon-mouse"
-              @click="submitForm('userForm')"
+              @click="submitForm('ruleForm')"
               >Sign Up</el-button
             >
           </el-form-item>
 
           <div class="text-foot">
-            Already have an account? <router-link to="login">Sign in</router-link>
+            Already have an account?
+            <router-link to="login">Sign in</router-link>
           </div>
         </el-form>
       </div>
@@ -70,6 +100,8 @@
 
 <script>
 import {} from "vue";
+import { request } from "./request";
+import { ElMessage } from "element-plus";
 export default {
   setup() {
     return {};
@@ -86,12 +118,21 @@ export default {
       rules: {
         username: [
           { required: true, message: "please input username", trigger: "blur" },
-          { min: 3, max: 5, message: "At least 3 characters", trigger: "blur" },
+          { min: 3, max: 5, message: "3-5 characters", trigger: "blur" },
         ],
-        password: [{ required: true, message: "please input password", trigger: "blur" }],
-        mail: [{ required: true, message: "please input mail", trigger: "blur" }],
+        password: [
+          { required: true, message: "please input password", trigger: "blur" },
+          { min: 8, max: 16, message: "8-16 characters", trigger: "blur" },
+        ],
+        mail: [
+          { required: true, message: "please input mail", trigger: "blur" },
+        ],
         institution: [
-          { required: true, message: "please input institution", trigger: "blur" },
+          {
+            required: true,
+            message: "please input institution",
+            trigger: "blur",
+          },
         ],
       },
     };
@@ -100,15 +141,44 @@ export default {
     // eslint-disable-next-line no-unused-vars
     submitForm(formName) {
       //   localStorage.setItem("userid", 1);
-      this.$router.push({ path: "/login" });
-      // this.$refs[formName].validate((valid) => {
-      //   if (valid) {
-      //     alert("submit!");
-      //   } else {
-      //     console.log("error submit!!");
-      //     return false;
-      //   }
-      // });
+      var that=this
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          // alert("submit!");
+          let res = this.signUp(this.userForm);
+            res.then(function (result) {
+              console.log(result)
+          if (result.msg=="success"){
+          that.$router.push({ path: "/login" });
+           ElMessage.success({
+                message: "sign up success",
+                type: "success",
+              });
+          }else{
+              ElMessage.error({
+                message: "sign up error",
+                type: "error",
+              });
+          }
+            })
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    signUp(userinfor) {
+      return request({
+        url: "/user/information/signUp",
+        method: "post",
+        data: {
+          name: userinfor.username,
+          mail: userinfor.mail,
+          institution: userinfor.institution,
+          password: userinfor.password,
+          state:1,
+        },
+      });
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

@@ -7,10 +7,18 @@
 </template>
 
 <script>
-import { reactive } from 'vue';
+import { reactive ,onMounted} from 'vue';
 // import { useRouter } from 'vue-router';
+import{getTags} from "./common"
 export default {
  setup () {
+    //1.加载list
+    onMounted(() => {
+      let res=getTags()
+       res.then(function (result) {
+         tagdata.tags=result.taglist
+       })
+    })
     // const router=useRouter()
     console.log("加载taglist")
     const tagdata = reactive({

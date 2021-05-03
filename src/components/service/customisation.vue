@@ -35,7 +35,7 @@
         <el-step title="Step 2"></el-step>
         <el-step title="Step 3"></el-step>
       </el-steps>
-
+ <!-- Step 1 -->
       <el-col :span="24" v-show="active == 0">
         <h2 style="margin-top: 30px">Step 1: Determine Workflow</h2>
         <p class="simpleText">
@@ -75,17 +75,18 @@
           </div>
         </el-col>
       </el-col>
+      <!-- Step 2 -->
       <el-col
         :span="24"
         v-show="active == 1 && customisationData.stepOne[0].selected"
-        style="border: 2px"
+        style="border: 2px;width: 100%;"
       >
         <h2 style="margin-top: 30px">Step 2: Identify Services</h2>
         <p class="simpleText">
           Please identify the services that will be assembled ...
         </p>
 
-        <el-col :span="24"
+        <el-col :span="24" style="width: 100%;"
           ><div class="grid-content"><b>Sequence Workflow</b></div></el-col
         >
         <el-col
@@ -124,14 +125,14 @@
 
       <el-col
         :span="24"
-        v-show="active == 1 && customisationData.stepOne[1].selected"
+        v-show="active == 1 && customisationData.stepOne[1].selected" style="width: 100%;"
       >
         <h2 style="margin-top: 30px">Step 2: Identify Services</h2>
         <p class="simpleText">
           Please identify the services that will be assembled ...
         </p>
 
-        <el-col :span="24"
+        <el-col :span="24" style="width: 100%;"
           ><div class="grid-content"><b>Parallel Workflow</b></div></el-col
         >
         <el-col
@@ -167,7 +168,7 @@
           ></el-button>
         </el-col>
       </el-col>
-
+<!-- Step 3 -->
       <el-col
         :span="24"
         v-show="active == 2 && customisationData.stepOne[0].selected"
@@ -282,7 +283,7 @@
       </el-col>
 
       <div class="clearfix"></div>
-      <el-col :span="24" style="float: left; padding-top: 0px">
+      <el-col :span="24" style="float: left; padding-top: 0px; width:100%;">
         <el-button
           :disabled="active == 2"
           style="float: right; margin-top: 10px"
@@ -835,4 +836,8 @@ h2 {
 .el-dialog__body {
   overflow: auto;
 }
+
+.el-col-24 {width: 100%;}
+.el-col-11{width:45.8333333333%}
+.el-col-5{width: 20.8333333333%;}
 </style>

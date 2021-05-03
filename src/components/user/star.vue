@@ -1,5 +1,6 @@
 <template>
-  <div>user starred services</div>
+<h1>Starred Services</h1>
+<el-empty description="empty"></el-empty>
 </template>
 
 <script>

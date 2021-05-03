@@ -22,16 +22,17 @@
         so that others can easily understand and then work on your problem.
       </p>
 
-      <el-row>
+     <el-row style="width:100%"> 
         <el-form
           :model="taskInfor.data"
           :label-position="top"
           :rules="rules"
           ref="ruleForm"
+          style="width:100%"
         >
-          <el-row>
+          <el-row style="width:100%"> 
             <h5 class="h5Title">Basic Information</h5>
-            <el-form-item style="margin: 0px">
+            <el-form-item style="margin: 0px;width:100%">
               <el-col :span="11" style="margin-left: 16px">
                 <el-form-item label="Name" prop="title">
                   <el-input v-model="taskInfor.data.title"></el-input>

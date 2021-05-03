@@ -1,5 +1,6 @@
 <template>
-  <div>user tasks</div>
+<h1>User Tasks</h1>
+<el-empty description="empty"></el-empty>
 </template>
 
 <script>

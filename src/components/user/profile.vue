@@ -43,9 +43,9 @@
       <div>
         <img src="" />
       </div>
-      <el-button @click="dialogFormVisible = true">Edit Profile</el-button>
+      <!-- <el-button @click="dialogFormVisible = true">Edit Profile</el-button> -->
 
-      <el-dialog title="Modify user information" v-model="dialogFormVisible">
+      <!-- <el-dialog title="Modify user information" v-model="dialogFormVisible">
         <el-form :model="userData">
           <el-form-item label="UserName" :label-width="formLabelWidth">
             <el-input v-model="userData.username" autocomplete="off"></el-input>
@@ -57,7 +57,7 @@
             <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
           </span>
         </template>
-      </el-dialog>
+      </el-dialog> -->
     </el-col>
   </el-row>
 </template>

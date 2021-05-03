@@ -9,7 +9,7 @@ describe('Progress.vue', () => {
       },
     })
     expect(wrapper.find('.el-progress__text').text()).toBe('66%')
-    expect(wrapper.find('.el-progress-bar__inner').attributes('style')).toBe('width: 66%;')
+    expect(wrapper.find('.el-progress-bar__inner').attributes('style')).toBe('width: 66%; animation-duration: 3s;')
   })
 
   test('status', () => {
@@ -128,5 +128,14 @@ describe('Progress.vue', () => {
       },
     })
     expect(wrapper.find('.el-progress__text').text()).toBe('占比100%')
+  })
+
+  test('slot', () => {
+    const wrapper = mount(Progress, {
+      slots: {
+        default: '自定义内容',
+      },
+    })
+    expect(wrapper.find('.el-progress__text').text()).toBe('自定义内容')
   })
 })

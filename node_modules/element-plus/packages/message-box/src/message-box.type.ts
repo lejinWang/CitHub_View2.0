@@ -1,25 +1,25 @@
-import { VNode } from 'vue'
-export type MessageType = 'success' | 'warning' | 'info' | 'error'
-export type MessageBoxCloseAction = 'confirm' | 'cancel' | 'close'
-export type MessageBoxData = MessageBoxInputData
+import type { VNode } from 'vue'
 
+export type Action = 'confirm' | 'close' | 'cancel'
+export type MessageType = '' | 'success' | 'warning' | 'info' | 'error'
+export type MessageBoxType = '' | 'prompt' | 'alert' | 'confirm'
+export type MessageBoxData = MessageBoxInputData & Action
 export interface MessageBoxInputData {
   value: string
-  action: MessageBoxCloseAction
+  action: Action
 }
 
 export interface MessageBoxInputValidator {
   (value: string): boolean | string
 }
 
-export declare class ElMessageBoxComponent {
+export declare interface MessageBoxState {
   title: string
   message: string
   type: MessageType
   iconClass: string
   customClass: string
   showInput: boolean
-  showClose: boolean
   inputValue: string
   inputPlaceholder: string
   inputType: string
@@ -28,7 +28,7 @@ export declare class ElMessageBoxComponent {
   inputErrorMessage: string
   showConfirmButton: boolean
   showCancelButton: boolean
-  action: MessageBoxCloseAction
+  action: Action
   dangerouslyUseHTMLString: boolean
   confirmButtonText: string
   cancelButtonText: string
@@ -39,43 +39,37 @@ export declare class ElMessageBoxComponent {
   cancelButtonClass: string
   editorErrorMessage: string
 
-  close(): any
+  beforeClose: null | ((action: Action, instance: MessageBoxState, done: () => void) => void)
+  callback: null | Callback
+  distinguishCancelAndClose: boolean
+  modalFade: boolean
+  modalClass: string
+  // refer to: https://github.com/ElemeFE/element/commit/2999279ae34ef10c373ca795c87b020ed6753eed
+  // seemed ok for now without this state.
+  // isOnComposition: false, // temporary remove
+  validateError: boolean
+  zIndex: number
 }
+
+export type Callback =
+  | ((value: string, action: Action) => any)
+  | ((action: Action) => any)
 
 /** Options used in MessageBox */
 export interface ElMessageBoxOptions {
-  /** Title of the MessageBox */
-  title?: string
 
-  /** Content of the MessageBox */
-  message?: string | VNode
-
-  /** Message type, used for icon display */
-  type?: MessageType
-
-  /** Custom icon's class */
-  iconClass?: string
+  /** Callback before MessageBox closes, and it will prevent MessageBox from closing */
+  beforeClose?: (
+    action: Action,
+    instance: MessageBoxState,
+    done: () => void,
+  ) => void
 
   /** Custom class name for MessageBox */
   customClass?: string
 
   /** MessageBox closing callback if you don't prefer Promise */
-  callback?: (action: MessageBoxCloseAction, instance: ElMessageBoxComponent) => void
-
-  /** Callback before MessageBox closes, and it will prevent MessageBox from closing */
-  beforeClose?: (action: MessageBoxCloseAction, instance: ElMessageBoxComponent, done: (() => void)) => void
-
-  /** Whether to lock body scroll when MessageBox prompts */
-  lockScroll?: boolean
-
-  /** Whether to show a cancel button */
-  showCancelButton?: boolean
-
-  /** Whether to show a confirm button */
-  showConfirmButton?: boolean
-
-  /** Whether to show a close button */
-  showClose?: boolean
+  callback?: Callback
 
   /** Text content of cancel button */
   cancelButtonText?: string
@@ -92,8 +86,38 @@ export interface ElMessageBoxOptions {
   /** Whether to align the content in center */
   center?: boolean
 
+  /** Content of the MessageBox */
+  message?: string | VNode
+
+  /** Title of the MessageBox */
+  title?: string
+
+  /** Message type, used for icon display */
+  type?: MessageType
+
+  /** Message box type */
+  boxType?: MessageBoxType
+
+  /** Custom icon's class */
+  iconClass?: string
+
   /** Whether message is treated as HTML string */
   dangerouslyUseHTMLString?: boolean
+
+  /** Whether to distinguish canceling and closing */
+  distinguishCancelAndClose?: boolean
+
+  /** Whether to lock body scroll when MessageBox prompts */
+  lockScroll?: boolean
+
+  /** Whether to show a cancel button */
+  showCancelButton?: boolean
+
+  /** Whether to show a confirm button */
+  showConfirmButton?: boolean
+
+  /** Whether to show a close button */
+  showClose?: boolean
 
   /** Whether to use round button */
   roundButton?: boolean
@@ -128,18 +152,22 @@ export interface ElMessageBoxOptions {
   /** Error message when validation fails */
   inputErrorMessage?: string
 
-  /** Whether to distinguish canceling and closing */
-  distinguishCancelAndClose?: boolean
 }
 
-export interface ElMessageBoxShortcutMethod {
-  (message: string, title: string, options?: ElMessageBoxOptions): Promise<MessageBoxData>
-  (message: string, options?: ElMessageBoxOptions): Promise<MessageBoxData>
-}
+export type ElMessageBoxShortcutMethod =
+  ((
+      message: string,
+      title: string,
+      options?: ElMessageBoxOptions,
+    ) => Promise<MessageBoxData>)
+  & ((
+      message: string,
+      options?: ElMessageBoxOptions,
+    ) => Promise<MessageBoxData>)
 
 export interface ElMessageBox {
   /** Show a message box */
-  (message: string, title?: string, type?: string): Promise<MessageBoxData>
+  // (message: string, title?: string, type?: string): Promise<MessageBoxData>
 
   /** Show a message box */
   (options: ElMessageBoxOptions): Promise<MessageBoxData>
@@ -153,9 +181,6 @@ export interface ElMessageBox {
   /** Show a prompt message box */
   prompt: ElMessageBoxShortcutMethod
 
-  /** Set default options of message boxes */
-  setDefaults (defaults: ElMessageBoxOptions): void
-
   /** Close current message box */
-  close (): void
+  close(): void
 }

@@ -217,4 +217,84 @@ describe('InputNumber.vue', () => {
     await wrapper.find('input').trigger('focus')
     expect(wrapper.getComponent(InputNumber).emitted('focus')).toHaveLength(1)
   })
+
+  test('clear', async () => {
+    const wrapper = _mount({
+      template: '<el-input-number v-model="num" :min="1"/>',
+      setup() {
+        const num = ref(2)
+        return {
+          num,
+        }
+      },
+    })
+    const elInput = wrapper.findComponent({ name: 'ElInputNumber' }).vm
+    elInput.handleInputChange('')
+    await nextTick()
+    expect(wrapper.vm.num).toBe(undefined)
+    elInput.increase()
+    await nextTick()
+    expect(wrapper.vm.num).toBe(1)
+    elInput.handleInputChange('')
+    await nextTick()
+    expect(wrapper.vm.num).toBe(undefined)
+    elInput.decrease()
+    await nextTick()
+    expect(wrapper.vm.num).toBe(1)
+  })
+
+  test('check increase and decrease button when modelValue not in [min, max]', async () => {
+    const wrapper = _mount({
+      template: `
+      <el-input-number
+        ref="inputNumber1"
+        v-model="num1"
+        :min="1"
+        :max="10"
+      />
+      <el-input-number
+        ref="inputNumber2"
+        v-model="num2"
+        :min="1"
+        :max="10"
+      />`,
+      setup() {
+        const num1 = ref(-5)
+        const num2 = ref(15)
+        const inputNumber1 = ref(null)
+        const inputNumber2 = ref(null)
+        return {
+          num1,
+          num2,
+          inputNumber1,
+          inputNumber2,
+        }
+      },
+    })
+    const elInputNumber1 = wrapper.vm.inputNumber1
+    const elInputNumber2 = wrapper.vm.inputNumber2
+    expect(wrapper.vm.num1).toBe(1)
+    expect(wrapper.vm.num2).toBe(10)
+
+    elInputNumber1.decrease()
+    await nextTick()
+    expect(wrapper.vm.num1).toBe(1)
+    elInputNumber1.increase()
+    await nextTick()
+    expect(wrapper.vm.num1).toBe(2)
+    elInputNumber1.increase()
+    await nextTick()
+    expect(wrapper.vm.num1).toBe(3)
+
+
+    elInputNumber2.increase()
+    await nextTick()
+    expect(wrapper.vm.num2).toBe(10)
+    elInputNumber2.decrease()
+    await nextTick()
+    expect(wrapper.vm.num2).toBe(9)
+    elInputNumber2.decrease()
+    await nextTick()
+    expect(wrapper.vm.num2).toBe(8)
+  })
 })

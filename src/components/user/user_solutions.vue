@@ -1,5 +1,6 @@
 <template>
-  <div>user solutions</div>
+<h1>User Solutions</h1>
+<el-empty description="empty"></el-empty>
 </template>
 
 <script>

@@ -8,11 +8,12 @@
       :xl="{ span: 6, offset: 0 }"
       style="
         background-color: #fff;
-        -webkit-box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
-        box-shadow: 0 13px 25px rgba(0, 0, 0, 0.08);
+   
         border-radius: 3px;
       "
     >
+         <!-- -webkit-box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08); -->
+        <!-- box-shadow: 0 13px 25px rgba(0, 0, 0, 0.08);  -->
       <el-menu
         default-active="1-1"
         class="el-menu-vertical-demo"
@@ -27,7 +28,7 @@
             <span>User Profile</span>
           </template>
           <el-menu-item-group>
-            <template #title>profile</template>
+            <!-- <template #title>profile</template> -->
             <el-menu-item index="1-1"
               ><i class="iconfont iconyonghu iforIconfont"></i> Profile</el-menu-item
             >
@@ -45,7 +46,7 @@
             <span>Content Management</span>
           </template>
           <el-menu-item-group>
-            <template #title>Services</template>
+            <!-- <template #title>Services</template> -->
             <el-menu-item index="2-1"
               ><i class="iconfont icontianchongxing- iforIconfont"></i>
               Services</el-menu-item

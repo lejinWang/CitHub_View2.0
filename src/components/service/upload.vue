@@ -56,7 +56,7 @@
         >
           <el-row>
             <h5 class="h5Title">Basic Information</h5>
-            <el-form-item style="margin: 0px">
+            <el-form-item style="margin: 0px;width:100%">
               <el-col :span="11" style="margin-left: 16px">
                 <el-form-item
                   label="Name"
@@ -218,7 +218,7 @@
                       <span class="text-primary">detailed explanations.</span>
                     </small>
                   </p>
-                  <el-row>
+                  <el-row style="    width: 100%;">
                     <el-col :span="2">Param</el-col
                     ><el-col :span="3" :offset="1">Type</el-col
                     ><el-col :span="5" :offset="1">Description</el-col
@@ -294,7 +294,7 @@
                       <span class="text-primary">detailed explanations.</span>
                     </small>
                   </p>
-                  <el-row>
+                  <el-row style="    width: 100%;">
                     <el-col :span="2">Param</el-col
                     ><el-col :span="3" :offset="1">Type</el-col
                     ><el-col :span="5" :offset="1">Description</el-col
@@ -643,6 +643,7 @@ export default {
   margin-top: 10px;
 }
 .h5Title {
+  width: 100%;
   color: #383d41;
   background-color: #e2e3e5;
   border-color: #d6d8db;

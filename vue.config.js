@@ -23,5 +23,8 @@ module.exports = {
                 }
             }
         }
-    }
+    },
+    // 解决打包白屏问题
+    publicPath:"./" 
+    
 }

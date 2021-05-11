@@ -20,7 +20,7 @@
       <p class="text-secondary">
         CitHub welcomes any individual or organisation to upload CIT services
         (testing tools). An explanation of the detailed requirements can be
-        found <a href="ModuleOfHelp/contribution.html">here</a>. Inputs and
+        found  <router-link  :to="{path:'/help'}" >here</router-link>. Inputs and
         outputs of services should also conform the
         <a href="" @click.prevent="">standard protocol</a> of CitHub.
       </p>

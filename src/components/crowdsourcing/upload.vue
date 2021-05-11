@@ -114,7 +114,7 @@ export default {
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
-        alert(valid);
+        // alert(valid);
         if (valid) {
           console.log(this.taskInfor.data);
         let res = request(

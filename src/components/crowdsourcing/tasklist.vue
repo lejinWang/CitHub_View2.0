@@ -11,7 +11,7 @@
                   </el-tag>
                 </div>
                 <p>{{ task.description }}</p>
-                <el-row
+                <el-row class="float-right"
                   ><el-col span="24" class="float-right"><span class="float-right"
                       >created by
                       <strong class="text-dark"

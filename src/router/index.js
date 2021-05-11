@@ -5,12 +5,15 @@ import service_infor from '../components/service/infor.vue'
 import service_upload from '../components/service/upload.vue'
 import service_type from '../components/service/type.vue'
 import service_customisation from '../components/service/customisation.vue'
+
 import task_index from '../components/crowdsourcing/index.vue'
 import task_tag from '../components/crowdsourcing/tag.vue'
 import task_upload from '../components/crowdsourcing/upload.vue'
 import task_infor from '../components/crowdsourcing/infor.vue'
+
 import login from '../components/user/login.vue'
 import signup from '../components/user/signUp.vue'
+
 import user_index from '../components/user/index.vue'
 import profile from '../components/user/profile.vue'
 import star from '../components/user/star.vue'
@@ -18,6 +21,12 @@ import message from '../components/user/message.vue'
 import user_services from '../components/user/user_services.vue'
 import user_tasks from '../components/user/user_tasks.vue'
 import user_solutions from '../components/user/user_solutions.vue'
+
+import help_index from '../components/help/index.vue'
+import help_concept from '../components/help/concept.vue'
+import help_feature from '../components/help/feature.vue'
+import help_contribution from '../components/help/contribution.vue'
+import help_development_team from '../components/help/development_team.vue'
 
 const routes = [
   {
@@ -105,7 +114,35 @@ const routes = [
             },
 
           ]
-      }
+      },
+      {
+        path:'/help',
+        component:help_index,
+        children: [
+          {
+            path: '/help',
+            name: 'concept',
+            component: help_concept
+          },
+          {
+            path: '/help/feature',
+            name: 'feature',
+            component: help_feature
+          },
+          {
+            path: '/help/contribution',
+            name: 'contribution',
+            component: help_contribution
+          },
+          {
+            path: '/help/development_team',
+            name: 'development_team',
+            component: help_development_team
+          },
+          
+        ]
+        }
+
     ]
 
   },

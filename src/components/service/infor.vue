@@ -30,7 +30,7 @@
         :xl="{ span: 4, offset: 0 }"
         style="text-align: right; float: right"
       >
-        <div><img :src="serviceInfor.data.img" style="height: auto" /></div>
+        <div><img :src="serviceInfor.data.img" style="height: 128px" /></div>
         <el-rate
           v-model="serviceInfor.data.scores"
           disabled
@@ -58,7 +58,7 @@
               text-algin: right;
             "
             ><el-button
-              style="font-size: 1rem; padding: 5px 10px"
+              style="font-size: 1rem; padding: 5px 10px;    min-height: 0px;"
               @click="starClick"
               ><i :class="starData.starClass"></i> Star</el-button
             ><el-label
@@ -136,6 +136,7 @@
             <p>{{ serviceInfor.data.description }}</p>
             <h2 style="margin-top: 30px">Inputs</h2>
             <el-table
+               v-loading="loading"
               :data="xputFormat.input"
               stripe
               style="width: 100%; font-size: 1rem"
@@ -152,6 +153,7 @@
             </el-table>
             <h2 style="margin-top: 30px">outputs</h2>
             <el-table
+              v-loading="loading"
               :data="xputFormat.output"
               stripe
               style="width: 100%; font-size: 1rem"
@@ -228,6 +230,7 @@
                 </el-tag>
               </el-col>
               <el-table
+                 v-loading="loading"
                 :data="evaluateDetailData.values"
                 :header-cell-style="{ background: '#343a40', color: '#fff' }"
               >
@@ -321,7 +324,7 @@
                       >{{ user.name.substr(0, 1).toUpperCase() }}</el-avatar
                     >
                   </el-col>
-                  <el-col :span="22">
+                  <el-col :span="16">
                     <el-input
                       style="width: 98%; margin-left: 2%"
                       type="textarea"
@@ -506,6 +509,11 @@
               style="margin-top: 30px" @click="useService"
               >Submit</el-button
             >
+             <el-alert v-show="notice.data.show"
+    :title="notice.data.title"
+    :type="notice.data.type"
+    style="    margin-top: 20px;
+    height: 47px;"  show-icon></el-alert>
             <h2 style="margin-top: 30px">
               Outputs<font
                 style="color: grey; font-weight: 200; font-size: 1.2rem"
@@ -594,6 +602,8 @@ export default {
           historyData.list = value.list;
         });
         //7)评分
+        // alert(user.id)
+        // alert(id)
         let userscoreres = service_common.getUserValuate(id, user.id);
         userscoreres.then(function (value) {
           rateData.value = value.score;
@@ -926,59 +936,59 @@ time|string|computational cost (ms)|12`,
           // 新回复
 
           reply: [
-            // {
-            //   id: 1,
-            //   root_id: 1,
-            //   post_id: 2, // 谁发布的评论
-            //   post_name: "gist",
-            //   to_id: 1,
-            //   to_name: "lejin", //@ 谁
-            //   content: `I think the "&#" symbol might not be the best choice for separation.`,
-            //   date: "2020年10月28日 14:22:33",
-            // },
-            // {
-            //   id: 1,
-            //   root_id: 1,
-            //   post_id: 2, // 谁发布的评论
-            //   post_name: "gist",
-            //   to_id: 1,
-            //   to_name: "lejin", //@ 谁
-            //   content: `I think the "&#" symbol might not be the best choice for separation.`,
-            //   date: "2020年10月28日 14:22:33",
-            // },
+            {
+              id: 1,
+              root_id: 1,
+              post_id: 2, // 谁发布的评论
+              post_name: "gist",
+              to_id: 1,
+              to_name: "lejin", //@ 谁
+              content: `I think the "&#" symbol might not be the best choice for separation.`,
+              date: "2020年10月28日 14:22:33",
+            },
+            {
+              id: 1,
+              root_id: 1,
+              post_id: 2, // 谁发布的评论
+              post_name: "gist",
+              to_id: 1,
+              to_name: "lejin", //@ 谁
+              content: `I think the "&#" symbol might not be the best choice for separation.`,
+              date: "2020年10月28日 14:22:33",
+            },
           ],
         },
-        // {
-        //   id: 2,
-        //   post_id: 1, // 谁发布的评论
-        //   post_name: "lejin",
-        //   content: `I think the "&#" symbol might not be the best choice for separation.`,
-        //   date: "2020年10月28日 14:22:33",
-        //   showReply: false,
-        //   replyComment: "",
-        //   reply: [
-        //     {
-        //       id: 1,
-        //       root_id: 1,
-        //       post_id: 2, // 谁发布的评论
-        //       post_name: "乐进",
-        //       to_id: 1,
-        //       to_name: "lejin", //@ 谁
-        //       content: `I think the "&#" symbol might not be the best choice for separation.`,
-        //       date: "2020年10月28日 14:22:33",
-        //     },
-        //     {
-        //       id: 1,
-        //       root_id: 1,
-        //       post_id: 2, // 谁发布的评论
-        //       post_name: "gist",
-        //       to_id: 1,
-        //       to_name: "lejin", //@ 谁
-        //       content: `I think the "&#" symbol might not be the best choice for separation.`,
-        //       date: "2020年10月28日 14:22:33",
-        //     },
-        //   ],
-        // },
+        {
+          id: 2,
+          post_id: 1, // 谁发布的评论
+          post_name: "lejin",
+          content: `I think the "&#" symbol might not be the best choice for separation.`,
+          date: "2020年10月28日 14:22:33",
+          showReply: false,
+          replyComment: "",
+          reply: [
+            {
+              id: 1,
+              root_id: 1,
+              post_id: 2, // 谁发布的评论
+              post_name: "乐进",
+              to_id: 1,
+              to_name: "lejin", //@ 谁
+              content: `I think the "&#" symbol might not be the best choice for separation.`,
+              date: "2020年10月28日 14:22:33",
+            },
+            {
+              id: 1,
+              root_id: 1,
+              post_id: 2, // 谁发布的评论
+              post_name: "gist",
+              to_id: 1,
+              to_name: "lejin", //@ 谁
+              content: `I think the "&#" symbol might not be the best choice for separation.`,
+              date: "2020年10月28日 14:22:33",
+            },
+          ],
+        },
       ],
     });
     const addNewComment = () => {
@@ -1037,17 +1047,37 @@ time|string|computational cost (ms)|12`,
     const outputJson = reactive({
       data: {},
     });
-
+    const notice=reactive({
+      data:{
+        show:false,
+        type:"warning",
+        title:"Runing"
+      }
+    })
     const useService=()=>{
+        notice.data.show=true
+      notice.data.title="Runing"
+      notice.data.type="warning"
        console.log(inputJson.data)
        outputJson.data={}
        let useres=service_common.useService(inputJson.data,serviceInfor.data.url)
        useres.then(function(value){
-         outputJson.data=value
+        if(value.time){  
+           notice.data.type="success"
+            notice.data.title=" completed !"
+                outputJson.data=value
+
+        }
+        else{
+           notice.data.type="error"
+            notice.data.title="input error ! please check your input ."
+
+        }
        })
     }
 
     return {
+      notice,
       service_common,
       addNewComment,
       addNewReply,

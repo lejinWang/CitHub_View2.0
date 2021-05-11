@@ -266,6 +266,13 @@
           @click="useService"
           >Submit</el-button
         >
+        <el-alert v-show="notice.data.show"
+    :title="notice.data.title"
+    :type="notice.data.type"
+    style="    margin-top: 20px;
+    height: 47px;"  show-icon>
+
+  </el-alert>
         <h2 style="margin-top: 30px">
           Outputs<font style="color: grey; font-weight: 200; font-size: 1.2rem">
             (in JSON format)</font
@@ -571,7 +578,19 @@ export default {
         time: "12",
       },
     });
+
+
+    const notice=reactive({
+      data:{
+        show:false,
+        type:"warning",
+        title:"Runing"
+      }
+    })
     const useService = () => {
+      notice.data.show=true
+      notice.data.title="Runing"
+      notice.data.type="warning"
       var jsonData=inputFormatForCom.data
       jsonData["ServiceId"]=serviceList.serviceId
       var str="Sequence"
@@ -592,7 +611,15 @@ export default {
         );
         useres.then(function(value){
           console.log("useres",value)
+          if (value.data=="failed"){
+            notice.data.type="error"
+            notice.data.title="input error ! please check your input ."
+          }
+          else{
+            notice.data.type="success"
+            notice.data.title=" completed !"
          outputFormatForCom.data=JSON.parse(value.data)
+          }
         })
 
       // console.log("serviceList",serviceList)
@@ -614,6 +641,7 @@ export default {
       customisationData,
       active,
       onChooseType,
+      notice
     };
   },
   methods: {
@@ -632,6 +660,7 @@ export default {
     },
     previous() {
       if (this.active-- < 1) this.active = 0;
+      this.notice.data.show=false
     },
     //组合使用时输入输出
     setInputAndOutputForPara() {
@@ -678,7 +707,7 @@ export default {
         var outputJson = service_common.XputToJsonFormat(service.outputFormat);
 
         for (var item in outputJson) {
-          // //console.log(item);
+          console.log(item);
           if (
             !Object.prototype.hasOwnProperty.call(
               this.outputFormatForCom.data,
@@ -688,11 +717,13 @@ export default {
             this.outputFormatForCom.data[item] = outputJson[item];
         }
       }
-
-      for (var i2 = 0; i < this.serviceList.Sequence.length; i2++) {
+  
+      for (var i2 = 0; i2 < this.serviceList.Sequence.length; i2++) {
         var service2 = this.serviceList.Sequence[i2];
         var inputJson = service_common.XputToJsonFormat(service2.inputFormat);
+            // console.log("fsdfs",inputJson)
         for (var item2 in inputJson) {
+          // alert(item2)
           if (
             !Object.prototype.hasOwnProperty.call(
               this.inputFormatForCom.data,
@@ -702,10 +733,11 @@ export default {
             if (
               !Object.prototype.hasOwnProperty.call(
                 this.outputFormatForCom.data,
-                item
+                item2
               )
             ) {
-              this.inputFormatForCom.data[item] = inputJson[item];
+              // alert(item2)
+              this.inputFormatForCom.data[item2] = inputJson[item2];
             }
           }
         }
@@ -774,6 +806,42 @@ export default {
   font-size: 33px !important;
   color: #007bff;
 }
+
+.grid-content {
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  margin-left: 0px;
+  color: #0d5f6f;
+  border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
+}
+
+.icontianchongxing- {
+  font-size: 55px;
+  color: #17a2b8;
+  float: left;
+}
+.btnTitle {
+  float: left;
+  margin-left: -47px;
+  margin-top: 59px;
+  color: #17a2b8;
+  font-weight: 500;
+      width: 47px;
+}
+.iconV {
+  font-size: 44px;
+  float: left;
+  color: #17a2b8;
+  margin-top: 5px;
+}
+.icontubiaozhizuo- {
+  font-size: 44px;
+  float: left;
+  color: #17a2b8;
+  margin-top: 5px;
+}
 </style>
 <style scoped>
 .text-secondary {
@@ -811,6 +879,7 @@ h2 {
   margin-top: 59px;
   color: #17a2b8;
   font-weight: 500;
+      width: 47px;
 }
 .iconV {
   font-size: 44px;

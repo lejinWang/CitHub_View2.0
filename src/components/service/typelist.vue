@@ -85,7 +85,7 @@ export default {
   margin: 10px;
   display: block;
   padding: 0.3rem;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 750;
   color: #343a40 !important;
 }
@@ -93,7 +93,7 @@ export default {
   margin-bottom: 10px;
   display: block;
   padding: 0.5rem 1rem;
-  font-size: 1rem;
+  font-size: 1rem !important;
   font-weight: 500;
    
   color: #007bff !important;

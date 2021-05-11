@@ -180,6 +180,7 @@ function getTags(tags) {
 }
 //获取服务用户单评分
 function getUserValuate(serviceId,userId){
+  // alert("/service/valuate/getUserScore/" + serviceId + "/" + userId)
   let res = request(
     {
       url: "/service/valuate/getUserScore/" + serviceId + "/" + userId,

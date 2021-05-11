@@ -178,3 +178,8 @@ a {
   text-decoration: none;
 }
 </style>
+<style>
+h2{
+      font-weight: 500;
+}
+</style>

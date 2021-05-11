@@ -14,7 +14,7 @@
           :lg="{ span: 6, offset: 0 }"
           :xl="{ span: 6, offset: 0 }"
           style="text-align: center"
-          ><img :src="service.img" style="height: auto"
+          ><img :src="service.img" style="height: 128px"
         /></el-col>
         <el-col
           :xs="{ span: 24, offset: 0 }"
